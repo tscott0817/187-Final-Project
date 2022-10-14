@@ -1,5 +1,5 @@
 ---
-title: "Final"
+title: "Final Project Proposal"
 author: 'Tyler Scott, Daniel Gordon'
 output: html_document
 date: "2022-10-12"
@@ -16,16 +16,50 @@ complaint_data <- read.csv('allegations.csv')
 
 For years there has been tension between the police force in the United States and its citizens. 
 Factors of this tension has been highly debated, but through data analysis we can more accurately pinpoint specific elements
-that can lead to this tension. Notably physical difference between the people and the police in an authoritative position. 
+that can lead to this tension. Notably physical differences such as age, race, and gender between people and the police. 
 We will be looking at the external factors that can lead to these tensions and how they correlate to the severity of allegations
 against the police. 
 
 # Data Description
 
 The data set we will be using has 33,368 complaints against against police in the United States between 1985 and 2020.
-It also keeps track of multiple aspects of the officer and the citizen complaining. This includes their race, gender,  
+It also keeps track of multiple aspects of the officer and the citizen complaining. This includes their race, age, sex, or any 
+other attribute about them.
 
-```{r cars}
+For example the number of reported incidents in the year 2010 based on the type of allegation and the age of the person involved, 
+as shown by the table below:
 
+```{r table}
+complaint_data |>
+  group_by(complainant_age_incident, fado_type) |>
+  filter(year_received == 2010, !is.na(complainant_age_incident)) |>
+  select(complainant_age_incident, fado_type, year_received) |>
+  ungroup() |>
+  head(n = 10)
+
+
+  
+
+```
+
+
+# Data Summary
+
+What we would like to answer with our project is to see if there is a correlation between certain demographics of people and types of complaints
+that are made against the police. We will also look at the frequency of complaints that are made based on these aspects. 
+
+Here is an example showing the averages of the types of complaints (or Fado Types) and the ages of the person filing the complaint:
+
+```{r age_year}
+complaint_data |>
+  group_by(complainant_age_incident, fado_type) |>
+  filter(complainant_age_incident > 0) |>
+  ggplot(mapping = aes(x = fado_type, y = complainant_age_incident, fill = 'red')) +
+  geom_boxplot() +
+  theme_light() +
+  theme(legend.position = 'none') +
+  labs(x = "Type of Complaint", y = "Age of Complaint Filer")
+  
+  
 ```
 
